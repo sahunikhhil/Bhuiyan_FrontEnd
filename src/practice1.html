@@ -1,0 +1,27 @@
+<!-- <form [formGroup]="form">
+    <div class="form-check">
+        <input class="form-check-input" type="radio" formControlName="listSelector" value="list1">
+        <label class="form-check-label">
+            पंजीकृत दस्तावेज
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" formControlName="listSelector" value="list2">
+        <label class="form-check-label">
+            अन्य दस्तावेज
+        </label>
+    </div>
+    <div class="col-4">
+        <label class="form-label"><span style="color: red;">*</span> नामांतरण का कारण :</label>
+        <select class="form-select namantranKaran" formControlName="selectedItem">
+            <ng-container *ngIf="form.get('listSelector').value === 'list1'">
+                <option value="" disabled selected>select</option>
+                <option *ngFor="let item of list1" [value]="item.value">{{ item.text }}</option>
+            </ng-container>
+            <ng * ngIf="form.get('listSelector').value === 'list2'">
+                <option value="" disabled selected>select</option>
+                <option * ngFor="let item of list2" [value]="item.value"> {{ item.text }}</option>
+            </ng - container>
+        </select>
+    </div>
+</form> -->

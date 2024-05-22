@@ -1,0 +1,29 @@
+export interface PropertyRegDetMain {
+    SrNo: string;
+    ID_MasterKey_FK_Deprecated: number;
+    PregNo: string;
+    NamantranPanjiEntryDate: Date;
+    OnlinePresentRegNo: string;
+    MutationInitiated: boolean;
+    PartsConsumed: number;
+    MutationCompleted: boolean;
+    MutationDate: Date;
+    NamantranType: string;
+    Pushflag: string;
+    PregId: number;
+    MutationReasonId: number;
+    Mut_Completed_B1DocumentId: number;
+    Mut_Completed_P2DocumentId: number;
+    Parea: number;
+    MutationNotRequired: boolean;
+    MutationCompletedFlagDate: Date;
+    OrderNo: string;
+    TotalArea: number;
+    VillageID: number;
+    KhasraNo: string;
+    MutationNotRequiredDate: Date;
+    PlotNo: string;
+    LoginSrNo: number;
+    PriviousNPEdateBeforeShift: Date;
+    NewKhasra_Renumbering: string;
+}

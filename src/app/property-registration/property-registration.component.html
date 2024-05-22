@@ -1,0 +1,558 @@
+<app-header></app-header>
+<main id="main" class="main">
+
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div style="display:block;
+                        background-color:   rgb(240, 234, 234);
+                        text-align: center;
+                        margin-left: -20px;
+                        margin-right: -20px;
+                        padding: 20px;
+                        border: 1px solid white; ">
+                            <label style="font-size: 32px;">नामांतरण पंजी में प्रविष्ठ</label><br>
+                            <label>(ऐसे अंतरण जिसके सम्बन्ध में ऑनलाइन सूचना प्राप्त नही हुई है उनकी ही प्रविष्ठि
+                                करे)</label>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <form class="row g-3" style="margin-top: 10px;" [formGroup]="form1">
+                                    <!-- [formGroup]="form1" -->
+                                    <div class="col-4">
+                                        <label class="form-label">
+                                            <span style="color: red;">*</span>
+                                            नामांतरण पंजी में दर्ज करने वर्ष :
+                                        </label>
+                                        <select class="form-select" aria-label="Default select example"
+                                            [(ngModel)]="Pregno" formControlName="PregNo">
+                                            <option selected disabled>--select year--</option>
+                                            <option value="{{year}}">{{ year }}</option>
+                                        </select>
+                                        <div *ngIf="f1['PregNo'].touched && f1['PregNo'].invalid">
+                                            <div *ngIf="f1['PregNo'].errors && f1['PregNo'].errors['required']"
+                                                style="color: red;">
+                                                Field is required.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <label class="form-label">
+                                            <span style="color: red;">*</span> नामांतरण का आधार :
+                                        </label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" [(ngModel)]="listSelector"
+                                                value="list1" name="listSelector"
+                                                [ngModelOptions]="{ standalone: true }">
+                                            <label class="form-check-label" for="gridRadios1">
+                                                पंजीकृत दस्तावेज
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" [(ngModel)]="listSelector"
+                                                value="list2" name="listSelector"
+                                                [ngModelOptions]="{ standalone: true }">
+                                            <label class="form-check-label" for="gridRadios2">
+                                                अन्य दस्तावेज
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <label class="form-label">
+                                            <span style="color: red;">*</span>
+                                            नामांतरण का कारण :</label>
+                                        <select class="form-select namantranKaran" #mutationReason
+                                            [(ngModel)]="MutationReasonid" formControlName="MutationReasonId"
+                                            (change)="MutationReason(mutationReason.value)">
+                                            <ng-container *ngIf="listSelector === 'list1'">
+                                                <option selected disabled>select</option>
+                                                <option [value]="item.value" *ngFor="let item of list1">{{ item.text }}
+                                                </option>
+                                            </ng-container>
+                                            <ng-container *ngIf="listSelector === 'list2'">
+                                                <option selected disabled>select</option>
+                                                <option [value]="item.value" *ngFor="let item of list2">{{ item.text }}
+                                                </option>
+                                            </ng-container>
+                                        </select>
+                                        <div *ngIf="f1['MutationReasonId'].touched && f1['MutationReasonId'].invalid ">
+                                            <div *ngIf="f1['MutationReasonId'].errors && f1['MutationReasonId'].errors['required']"
+                                                style="color: red;">
+                                                Field is required.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4" id="date">
+                                        <label class="form-label">विलेख में अंकित ई- पंजीयन दिनांक :
+                                        </label>
+                                        <input type="date" class="form-control">
+                                    </div>
+
+                                    <div class="col-4" id="e-id">
+                                        <label class="form-label"><span style="color: red;">*</span>
+                                            विलेख में अंकित ई-पंजीयन आई-डी नंबर : </label>
+                                        <input type="text" class="form-control"
+                                            placeholder="उदाहरण : CG6312345678987456">
+                                    </div>
+                                    <div class="col-4">
+                                        <label class="form-label">
+                                            बसरा चुनें : </label>
+                                        <select class="form-select select_basra" aria-label="Default select example"
+                                            [(ngModel)]="selectedItem" [ngModelOptions]="{standalone: true}"
+                                            (change)="ByBasra()" name="Basra">
+                                            <option selected disabled value=""> --Select-- </option>
+                                            <option *ngFor="let item of propertyReg" [ngValue]="item">
+                                                {{item.BasraNo}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <fieldset>
+                                        <div *ngIf="isBasraAdditionalvisible">
+                                            <label class="form-label"><span style="color: red;">*</span>
+                                                नामांतरण हेतु खसरा चुनें :
+                                            </label>
+                                            <!-- Table with hoverable rows -->
+
+                                            <table class="table table-hover namantranChaynitKhasra" disa>
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col"><input type="checkbox"
+                                                                (change)="selectAll($event)" [checked]="allSelected"
+                                                                name="basra"></th>
+                                                        <th scope="col">खसरा नंबर</th>
+                                                        <th scope="col">खसरा का रकबा</th>
+                                                        <th scope="col">अंतरित रकबा प्रविष्ट करे</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let item of general; let i = index">
+                                                        <th scope="row">
+                                                            <input type="checkbox"
+                                                                (change)="onCheckboxChange($event, i)"
+                                                                [checked]="isChecked(i)">
+                                                        </th>
+                                                        <td>
+                                                            <input type="text" [(ngModel)]="Khasrano"
+                                                                formControlName="KhasraNo" readonly>
+
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" [(ngModel)]="Totalarea"
+                                                                formControlName="TotalArea" readonly>
+                                                        </td>
+
+                                                        <td>
+                                                            <input type="text" [(ngModel)]="parea"
+                                                                formControlName="Parea">
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <input type="hidden" [(ngModel)]="iD_MasterKey_FK_Deprecated"
+                                                formControlName="ID_MasterKey_FK_Deprecated" class="Id_hide" readonly>
+                                            <!-- End Table with hoverable rows -->
+                                            <div class="text-center khasraButton" *ngIf="isKhasraButtonisvisible">
+                                                <button type="submit" class="btn btn-primary"
+                                                    (click)="showSelectedIds()">
+                                                    खसरा जोड़े
+                                                </button>
+                                            </div>
+                                            <label class="form-label">
+                                                चयनित खसरा क्रमांक : </label>
+                                            <input type="text" class="form-control" placeholder="चयनित खसरा क्रमांक"
+                                                [value]="selectedIds" readonly>
+
+                                            <div class="text-center" style="margin-bottom: 10px;">
+                                                <button type="submit" class="btn btn-primary BhuSwamiJode"
+                                                    (click)="getOwnerDetail()">
+                                                    चयनित खाते में भू-स्वामी जोड़े
+                                                </button>
+                                                <button type="submit" class="btn btn-primary BhuSwamiJode"
+                                                    (click)="FinalSubmission()">
+                                                    FinalSubmission
+                                                </button>
+
+
+                                            </div>
+                                        </div> <!--  basra_additional off -->
+                                    </fieldset>
+
+                                </form>
+                            </div>
+                        </div>
+                        <div class="card" *ngIf="isChayanitBhuSwamivisible">
+                            <div class="card-body">
+                                <label class="form-label" style="display: block;
+                                    text-align: center;
+                                    margin:10px;font-size: 24px;
+                                    background-color: rgb(192, 247, 239);
+                                    color: black;">
+                                    वर्तमान भूस्वामी की जानकारी
+                                </label>
+
+                                <table class="table table-bordered border-primary table-hover"
+                                    style="text-align: center">
+                                    <thead>
+                                        <tr class="table-warning">
+                                            <th scope="col">नाम </th>
+                                            <th scope="col">पिता का नाम </th>
+                                            <th scope="col">लिंग </th>
+                                            <th scope="col">वर्ग </th>
+                                            <th scope="col">जाति </th>
+                                            <th scope="col">पता </th>
+                                            <th scope="col">मोबाइल नंबर </th>
+                                            <th scope="col">आधार क्रंमाक</th>
+                                            <th scope="col">ऋण पुस्तिका </th>
+                                            <th scope="col">पालक के ( पिता /पति )</th>
+                                            <th scope="col">पालक का नाम </th>
+                                            <th scope="col">पालक के ( पिता/पति ) का नाम </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let data of OwnerDetail">
+                                            <td>{{data.OwnerName}}</td>
+                                            <td>{{data.OwnerHFName}}</td>
+                                            <td>{{data.Gender}}</td>
+                                            <td>{{data.Category}}</td>
+                                            <td>{{data.Caste}}</td>
+                                            <td>{{data.OwnerAddress}}</td>
+                                            <td>{{data.MobileNumber}}</td>
+                                            <td>{{data.AadhaarNumber}}</td>
+                                            <td>{{data.FarmerBookNumber}}</td>
+                                            <td>{{data.GuardianHFFlag}}</td>
+                                            <td>{{data.GuardianName}}</td>
+                                            <td>{{data.GuardianHFName}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <!-- </div>
+                        </div> 
+                        
+                        <div class="card ">
+                            <div class="card-body"> -->
+                                <label class="form-label" style="display: block;
+                                    text-align: center;
+                                    margin:20px;
+                                    font-size:24px;
+                                    background-color: rgb(192, 247, 239);
+                                    color: black;">
+                                    प्रस्तावित भूस्वामी की जानकारी
+                                </label>
+                                <div class="row g-3" style="display: block;
+                                 text-align: center;margin: 10px;">
+                                    <div style="display: flex;
+                                             justify-content: center; 
+                                             align-items: center; 
+                                             text-align: center;">
+                                        <label class="col-3">मौजूदा भूस्वामी हेतु बसरा चुनें:</label>
+                                        <div class="col-3" style="display: block;
+                                          align-items: center;">
+                                            <select class="form-select" aria-label="Default select example"
+                                                (change)="MaujudaBhuSwami()">
+                                                <option selected disabled>--select--
+                                                </option>
+                                                <option>1 </option>
+                                                <option>2</option>
+                                                <option>3 </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="isMaujudaBhumiswamiisvisible">
+                                    <div style="position: relative; padding: 10px;">
+                                        <div style="position: absolute; top: 0; right: 0;">
+                                            <button type="button" class="btn btn-primary" style="font-size: 10px;"
+                                                (click)="nayeBhuswamiJankari()">
+                                                <i class="bi bi-plus-circle"></i>
+                                                अतिरिक्त प्रस्तावित भूस्वामी जोड़ने हेतु क्लिक करें
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <table class=" table table-bordered border-primary table-hover"
+                                        style="text-align: center;margin: 15px;">
+                                        <thead>
+                                            <tr class="table-warning ">
+                                                <th scope="col">Remove</th>
+                                                <th scope="col">नाम </th>
+                                                <th scope="col">पिता का नाम </th>
+                                                <th scope="col">लिंग </th>
+                                                <th scope="col">वर्ग </th>
+                                                <th scope="col">जाति </th>
+                                                <th scope="col">पता </th>
+                                                <th scope="col">मोबाइल नंबर </th>
+                                                <th scope="col">आधार क्रंमाक</th>
+                                                <th scope="col">ऋण पुस्तिका </th>
+                                                <th scope="col">पालक के ( पिता /पति )</th>
+                                                <th scope="col">पालक का नाम </th>
+                                                <th scope="col">पालक के ( पिता/पति ) का नाम </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr><!--*ngFor="let data of regBhuiyan; let i = index" -->
+                                                <td style="color: blue;">
+                                                    <button style="border: none;  background-color: transparent; color: blue;
+                                                      text-decoration: underline;cursor: pointer;">
+                                                        <!-- (click)="removeRow(i)" -->
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </td>
+                                                <td>1</td>
+                                                <td>2</td>
+                                                <td>3</td>
+                                                <td>4</td>
+                                                <td>5</td>
+                                                <td>6</td>
+                                                <td>7</td>
+                                                <td>8</td>
+                                                <td>9</td>
+                                                <td>10</td>
+                                                <td>11</td>
+                                                <td>12</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div *ngIf="isNayeBhumiswamiMenu"> <!-- new_bhuswami -->
+                                    <div style="border: 1px solid black;margin: 10px; padding:5px; 
+                                            border-radius: 100px;">
+                                        <div style="display: flex;justify-content: center; align-items: center; 
+                                            text-align: center;">
+                                            <label class="col-4">नए भूस्वामी की जानकारी प्रविष्ट करे: </label>
+                                            <div class="col-2" style="display: block; align-items: center;">
+                                                <select class="form-select PrashtavitBhuSwamiType" #typeofnewbhuswami
+                                                    (change)="nayeBhuswamiType(typeofnewbhuswami.value)"
+                                                    aria-label="Default select example">
+                                                    <option value="" selected disabled>--select--</option>
+                                                    <option value="निजी"> निजी </option>
+                                                    <option value="शासकीय"> शासकीय </option>
+                                                    <option value="अशासकीय"> अशासकीय </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card ChayanitBhuSwamiForm" *ngIf="isNayeBhumiswaminijiFormvisible">
+                                        <div class="card-body" style="border:1px solid black">
+                                            <form class="row g-3" style="margin-top: 10px;" [formGroup]="form"
+                                                (ngSubmit)="submit()">
+                                                <div class="col-4">
+                                                    <label class="form-label">
+                                                        <span style="color: red;">*</span>
+                                                        नाम:
+                                                    </label>
+                                                    <input type="text" class="form-control" placeholder="Enter Name"
+                                                        formControlName="OwnerName" required>
+                                                    <div *ngIf="f['OwnerName'].touched && f['OwnerName'].invalid">
+                                                        <div *ngIf="f['OwnerName'].errors && f['OwnerName'].errors['required']"
+                                                            style="color: red;">
+                                                            Field is required.</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <label class="form-label">
+                                                        <span style="color: red;">*</span>
+                                                        नाम (पिता/पति):
+                                                    </label>
+                                                    <input type="text" class="form-control"
+                                                        placeholder="Enter Father/Husband Name"
+                                                        formControlName="OwnerFather" required>
+                                                    <div *ngIf="f['OwnerFather'].touched && f['OwnerFather'].invalid">
+                                                        <div *ngIf="f['OwnerFather'].errors && f['OwnerFather'].errors['required']"
+                                                            style="color: red;">
+                                                            Field is required.</div>
+                                                    </div>
+                                                    <div
+                                                        style="border:1px solid black;width:100px;text-align:center;margin: 5px;">
+                                                        <input type="radio" value="pita" name="HFFlag" value="1"
+                                                            formControlName="HFFlag" checked>
+                                                        <label style="margin-right: 5px;">पिता </label>
+                                                        <input type="radio" value="pati" name="HFFlag" value="0"
+                                                            formControlName="HFFlag">
+                                                        <label style="margin-right: 5px;">पति
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <label class="form-label">
+                                                        <span style="color: red;">*</span>
+                                                        लिंग :
+                                                    </label>
+                                                    <select class="form-select" aria-label="Default select example"
+                                                        formControlName="Gender" required>
+                                                        <option selected value="">--Select Gender--</option>
+                                                        <option value="1"> पुरुष </option>
+                                                        <option value="2"> महिला </option>
+                                                        <option value="3"> अन्य </option>
+                                                    </select>
+                                                    <div *ngIf="f['Gender'].touched && f['Gender'].invalid">
+                                                        <div *ngIf="f['Gender'].errors && f['Gender'].errors['required']"
+                                                            style="color: red;">
+                                                            Field is required.</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <input type="checkbox" id="nabalig_check"
+                                                        (change)="nabaligData($event)">
+                                                    <label class="form-label" style="margin-left: 10px;">
+                                                        भूस्वामी के नाबालिग होने पर checkbox को check करके पालक की
+                                                        जानकारी प्रविष्ट करे
+                                                    </label>
+                                                </div>
+                                                <div class="row g-3 nabalig_form" *ngIf="isNabaligformvisible">
+                                                    <div class="row">
+                                                        <div class="col-4">
+                                                            <label class="form-label">
+                                                                <span style="color: red;">*</span>
+                                                                पालक का नाम :
+                                                            </label>
+                                                            <input type="text" class="form-control"
+                                                                formControlName="GuardianName_Kreta"
+                                                                placeholder="Enter Parent Name">
+                                                            <div
+                                                                *ngIf="f['GuardianName_Kreta'].touched && f['GuardianName_Kreta'].invalid">
+                                                                <div *ngIf="f['GuardianName_Kreta'].errors && f['GuardianName_Kreta'].errors['required']"
+                                                                    style="color: red;">
+                                                                    Field is required.</div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <label class="form-label">
+                                                                <span style="color: red;">*</span>
+                                                                पालक के :
+                                                            </label>
+                                                            <div style="border:1px solid black;width:100px;text-align:
+                                                            center;">
+                                                                <input type="radio" value="pita" name="nabalig"
+                                                                    formControlName="GuardianHFFlag_Kreta" value="1"
+                                                                    checked>
+                                                                <label style="margin-right: 5px;">पिता
+                                                                </label>
+                                                                <input type="radio" value="pati" name="nabalig"
+                                                                    formControlName="GuardianHFFlag_Kreta" value="0">
+                                                                <label style="margin-right: 5px;">पति
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <label class="form-label">
+                                                                <span style="color: red;">*</span>
+                                                                नाम :
+                                                            </label>
+                                                            <input type="text" class="form-control"
+                                                                formControlName="GuardianHFName_Kreta"
+                                                                placeholder="Enter Name of parents relative">
+                                                            <div
+                                                                *ngIf="f['GuardianHFName_Kreta'].touched && f['GuardianHFName_Kreta'].invalid">
+                                                                <div *ngIf="f['GuardianHFName_Kreta'].errors && f['GuardianHFName_Kreta'].errors['required']"
+                                                                    style="color: red;">
+                                                                    Field is required.</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <label class="form-label">
+
+                                                        पता :
+                                                    </label>
+                                                    <input type="text" class="form-control" placeholder="Enter Address">
+                                                </div>
+                                                <div class="col-4">
+                                                    <label class="form-label">
+
+                                                        मोबाइल नंबर :
+                                                    </label>
+                                                    <input type="text" class="form-control"
+                                                        placeholder="Enter Mobile Number">
+                                                </div>
+                                                <div class="col-4">
+                                                    <label class="form-label">
+                                                        <span style="color: red;">*</span>
+                                                        वर्ग :
+                                                    </label>
+                                                    <select class="form-select" aria-label="Default select example"
+                                                        formControlName="Category" required>
+                                                        <option selected value="" disabled>--Select Class--</option>
+                                                        <option> a </option>
+                                                        <option> b </option>
+                                                        <option> c </option>
+
+                                                    </select>
+                                                    <div *ngIf="f['Category'].touched && f['Category'].invalid">
+                                                        <div *ngIf="f['Category'].errors && f['Category'].errors['required']"
+                                                            style="color: red;">
+                                                            Field is required.</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <label class="form-label">
+                                                        <span style="color: red;">*</span>
+                                                        जाति :
+                                                    </label>
+                                                    <select class="form-select" aria-label="Default select example"
+                                                        formControlName="Caste" required>
+                                                        <option selected value="" disabled> --Select Caste--</option>
+                                                        <option> a </option>
+                                                        <option> b </option>
+                                                        <option> c </option>
+
+                                                    </select>
+                                                    <div *ngIf="f['Caste'].touched && f['Caste'].invalid">
+                                                        <div *ngIf="f['Caste'].errors && f['Caste'].errors['required']"
+                                                            style="color: red;">
+                                                            Field is required.</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <label class="form-label">
+
+                                                        आधार नंबर दर्ज करे :
+                                                    </label>
+                                                    <input type="text" class="form-control"
+                                                        placeholder="Enter Adhar Number">
+                                                </div>
+                                                <div class="col-4">
+                                                    <label class="form-label">
+
+                                                        ऋण पुश्तिका का नंबर प्रविष्ट करे :
+                                                    </label>
+                                                    <input type="text" class="form-control"
+                                                        placeholder="Enter ऋण पुश्तिका Number">
+                                                </div>
+                                                <div style="display: flex; 
+                                                      justify-content: center;
+                                                     align-items: center;">
+                                                    <button type="button" class="btn btn-primary"
+                                                        style="height: 35px; width: 200px; padding: 5px; font-size: 14px;"
+                                                        type="submit" [disabled]="!form.valid">
+                                                        <i class="bi bi-save" style="margin-right: 5px;"></i>
+                                                        प्रस्तावित भूस्वामी जोड़े
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div> <!-- new_bhuswami end -->
+                            </div>
+                            <div class="row"
+                                style="display: flex; justify-content: center; align-items: center; text-align: center;">
+                                <a href="" style="font-size: 14px; cursor: pointer;">
+                                    <span style="color: red;">*</span>
+                                    दस्तावेज अपलोड हेतु क्लिक करें
+                                </a>
+                                <button type="button" class="btn btn-primary"
+                                    style="height: 35px; width: 150px; font-size: 14px; margin-left: 10px;">
+                                    <i class="bi bi-save2-fill"></i>
+                                    सुरक्षित करें
+                                </button>
+                            </div>
+                        </div> <!--prashtavit_bhuSwami card -->
+                    </div><!--end card-body  root -->
+                </div><!--end card root -->
+            </div>
+        </div>
+    </section>
+
+</main><!-- End #main -->

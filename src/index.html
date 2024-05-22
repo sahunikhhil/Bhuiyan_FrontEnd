@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>BhuiyanTemplate</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+
+<body class="body-class ig-typography ig-scrollbar">
+  <app-root></app-root>
+</body>
+<!-- Vendor JS Files -->
+<script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+<script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="assets/vendor/chart.js/chart.umd.js"></script>
+<script src="assets/vendor/echarts/echarts.min.js"></script>
+<script src="assets/vendor/quill/quill.min.js"></script>
+<script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+<script src="assets/vendor/tinymce/tinymce.min.js"></script>
+<script src="assets/vendor/php-email-form/validate.js"></script>
+
+<!-- Template Main JS File -->
+<script src="assets/js/main.js"></script>
+<script src="assets/js/jquery.min.js"></script>
+
+
+<script type="text/javascript">
+  $(document).ready(function () {
+
+    // alert('कृपया ग्राम चुनें।')
+    $("#data-table").hide();
+    console.log('table hide page 1')
+    $('#sidebarButton').click(function () {
+      if ($('.body-class').hasClass('toggle-sidebar')) {
+        $('.body-class').removeClass('toggle-sidebar');
+      } else {
+        $('.body-class').addClass('toggle-sidebar');
+      }
+    })
+    $("#gram").change(function () {
+      $("#table-title").remove();
+      $("#data-table").show();
+      console.log('table show page 1');
+    })
+
+    // var list1 = ['विक्रय', 'दान', 'सह खातेदार हटाना /रजिस्टर हक्त्याग', 'खाता विभाजन (बटवारा)',
+    //   'वासीयंतनामा', 'तबादलानामा', 'भूमि आबंटन'];
+
+    // var list2 = ['उत्तराधिकार', 'सह खातेदार हटाना /रजिस्टर हक्त्याग', 'खाता विभाजन (बटवारा)', 'वासीयंतनामा',
+    //   'तबादलानामा', 'बालिग होना', 'भूमि व्यपवर्तन', 'भूमि आबंटन', 'भू-अर्जन', 'बंदोबस्त त्रुटि सुधार',
+    //   'वरिष्ठ न्यायलय द्वारा निम्न न्यायलय के आदेश में परिवर्तन', 'सह खातेदार जोड़े', 'ग्राम नौकर नियुक्ति'
+    // ];
+
+    $('input[type="radio"][name="listSelector"]').change(function () {
+      var selectedValue = $(this).val();
+      $('#dropdownMenu').empty();
+      if (selectedValue === 'list1') {
+        $('#date').show();
+        $('#e-id').show();
+      } else if (selectedValue === 'list2') {
+        $('#date').hide();
+        $('#e-id').hide();
+        if (selectedValue === 'उत्तराधिकार') {
+          $('#btn').hide(); // Hide button when 'उत्तराधिकार' is selected
+        } else {
+          $('#btn').show(); // Show button for other options in list2
+        }
+      }
+    });
+
+    $('.namantranKaran').change(function () {
+      var value = $(this).val();
+      // console.log("Mutation_Reason=" + value)
+      if (value === '9') {
+
+        $('.khasraButton').hide(); // Hide button when 'उत्तराधिकार' is selected
+        $('.namantranChaynitKhasra').find('button, input, select, textarea').prop('disabled', true);
+        $('input').filter(':checkbox').prop('checked', true);
+      } else {
+        $('.khasraButton').show(); // Show button for other options in list2
+        $('.namantranChaynitKhasra').find('button, input, select, textarea').prop('disabled', false);
+        $('input').filter(':checkbox').prop('checked', false);
+      }
+    });
+
+    // $('.basra_additional').hide();
+    // $('.select_basra').change(function () {
+    //   $('.basra_additional').show();
+    // });
+
+    // $('#root_checkbox').change(function () {
+    //   var masterChecked = $(this).prop('checked');
+    //   $('input[type="checkbox"][name="basra"]').prop('checked', masterChecked);
+    // });
+    // $('input[type="checkbox"][name="basra"]').not('#root_checkbox').change(function () {
+    //   var allChecked = true;
+    //   $('input[type="checkbox"][name="basra"]').not('#root_checkbox').each(function () {
+    //     if (!$(this).prop('checked')) {
+    //       allChecked = false;
+    //       return false;
+    //     }
+    //   });
+    //   $('#root_checkbox').prop('checked', allChecked);
+    // });
+
+
+    // $('.ChayanitBhuSwami').hide();
+    // $('.BhuSwamiJode').click(function () {
+    //   console.log('button clicked')
+    //   $('.ChayanitBhuSwami').show();
+    // });
+
+    $('.ChayanitBhuSwamiForm').hide()
+    $('.nabalig_form').hide();
+    $('.PrashtavitBhuSwamiType').change(function () {
+      var value = $(this).val();
+      console.log(value)
+      if (value === 'निजी') {
+        $('.ChayanitBhuSwamiForm').show()
+      }
+      else {
+        $('.ChayanitBhuSwamiForm').hide()
+      }
+    });
+
+    $('#nabalig_check').change(checkCheckbox);
+    function checkCheckbox() {
+      if ($('#nabalig_check').is(':checked')) {
+
+        $('.nabalig_form').show();
+      } else {
+        $('.nabalig_form').hide();
+      }
+    }
+
+  });
+
+
+</script>
+
+
+</html>
